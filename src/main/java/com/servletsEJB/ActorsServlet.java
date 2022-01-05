@@ -1,10 +1,11 @@
-package com.servlets;
+package com.servletsEJB;
 
 
 
-import com.beans.RepositoryBean;
+import com.model.Actor;
 import com.model.Movie;
-import com.repo.Repository;
+import com.repo.ActorRepository;
+import com.repo.MovieRepository;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -16,11 +17,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet("/movies")
-public class MoviesServlet extends HttpServlet {
+@WebServlet("/actors")
+public class ActorsServlet extends HttpServlet {
 
     @EJB
-    private RepositoryBean repository;
+    private ActorRepository actorRepository;
+    @EJB
+    private MovieRepository movieRepository;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
@@ -29,13 +32,18 @@ public class MoviesServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        List<Movie> movies = repository.getAll();
+        if (request.getParameter("movieID") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+        }
+        int movieID = Integer.parseInt(request.getParameter("movieID"));
+        Movie movie = movieRepository.findById(movieID);
+        List<Actor> actors = actorRepository.getActorByMovieID(movieID);
         out.println("<!DOCTYPE html>");
         out.println("");
         out.println("<html lang=\"en\">");
         out.println("<head>\n" +
                 "    <meta charset=\"UTF-8\">\n" +
-                "    <title>Movies</title>");
+                "    <title>Actors</title>");
         out.println("<style>" +
                 "table {\n" +
                 "            font-family: arial, sans-serif;\n" +
@@ -80,35 +88,37 @@ public class MoviesServlet extends HttpServlet {
                 "    </style>\n" +
                 "</head>");
        out.println("<div>\n" +
-               "        <h2>Movies DataBase</h2>\n" +
+               "        <h2>Actors for Movie:"+movie.getTitle()+"</h2>\n" +
                "            <form method=\"post\" action=\"dispatcher\">\n" +
                "                <input class=\"home-input\" type=\"text\" name=\"destination\" value=\"home\"/>\n" +
                "                <input class=\"home-button\" type=\"submit\" value=\"HOME\"/>\n" +
                "            </form>\n" +
+               "   <form method=\"post\" action=\"dispatcher\">\n" +
+               "                <input class=\"home-input\" type=\"text\" name=\"destination\" value=\"mv\"/>\n" +
+               "                <input class=\"home-button\" type=\"submit\" value=\"Back to movies list\"/>\n" +
+               "            </form>\n" +
                "        <table>");
         out.println("<tr>");
-        out.println("<td>ID</td>");
-        out.println("<td>Title</td>");
-        out.println("<td>Rating</td>");
-        out.println("<td>Genre</td>");
+        out.println("<td>Name</td>");
+        out.println("<td>Age</td>");
+        out.println("<td>Gender</td>");
         out.println("<td>Delete action</td>");
-
-        for (Movie mov:movies
+        if(actors != null) {
+            for (Actor actor : actors
             ) {
-            out.println("<tr>");
-            out.println("<td>"+mov.getId()+"</td>");
-            out.println("<td>"+mov.getTitle()+"</td>");
-            out.println("<td>"+mov.getRating()+"/10</td>");
-            out.println("<td>"+mov.getGenre()+"</td>");
-            out.println("<td>\n" +
-                    "                    <form action=\"dispatcher\" method=\"post\">\n" +
-                    "                        <input type=\"text\" name=\"deleteId\" class=\"hidden\" value=\""+mov.getId()+"\" />\n" +
-                    "                        <input class=\"button\" type=\"submit\" value=\"Delete\">\n" +
-                    "                    </form>\n" +
-                    "                </td>");
-            out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td>" + actor.getName() + "</td>");
+                out.println("<td>" + actor.getAge() + "</td>");
+                out.println("<td>" + actor.getGender() + "</td>");
+                out.println("<td>\n" +
+                        "                    <form action=\"dispatcher\" method=\"post\">\n" +
+                        "                        <input type=\"text\" name=\"deleteActorId\" class=\"hidden\" value=\"" + actor.getId() + "\" />\n" +
+                        "                        <input class=\"button\" type=\"submit\" value=\"Delete\">\n" +
+                        "                    </form>\n" +
+                        "                </td>");
+                out.println("</tr>");
             }
-
+        }
         out.println("</table>\n" +
                 "    </div>\n" +
                 "</body>\n" +

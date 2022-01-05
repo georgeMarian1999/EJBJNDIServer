@@ -1,14 +1,21 @@
-package com.servlets;
+package com.servletsEJB;
 
 
+import com.repo.MovieRepository;
+
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-@WebServlet("/delete")
-public class DeleteServlet extends HttpServlet {
+@WebServlet("/deleteMovie")
+public class DeleteMovieServlet extends HttpServlet {
+
+    @EJB
+    private MovieRepository movieRepository;
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
     }
@@ -23,13 +30,12 @@ public class DeleteServlet extends HttpServlet {
             else {
                 request.getRequestDispatcher("/errorMessage.html").forward(request, response);
             }
-//            JSONTemplate jsonTemplate = new JSONTemplate();
-//            jsonTemplate.deleteMovie(ID);
+            movieRepository.deleteById(ID);
             System.out.println("Movie with id "+id+" deleted");
-            request.getRequestDispatcher("/successDeleteMessage.html").forward(request, response);
+            request.getRequestDispatcher("/").forward(request, response);
 
         }catch (Exception e){
-            request.getRequestDispatcher("/errorMessage.html").forward(request, response);
+            request.getRequestDispatcher("/").forward(request, response);
         }
 
     }

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movies</title>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .button {
+            background: #e14e4e;
+            border-radius: 7px;
+            padding: 10px;
+            border-width: 0;
+            width: 130px;
+            color: white;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #45a3ff;
+        }
+        .home-button {
+            display: flex;
+            padding: 5px;
+            border-width: 0;
+            border-radius: 4px;
+            background: #45a3ff;
+            margin-bottom: 15px;
+            text-transform: capitalize;
+        }
+        .home-button a {
+            text-decoration: none;
+            color: black;
+        }
+        .home-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h2>Showing the actors that played in the movie </h2>
+            <form method="post" action="dispatcher">
+                <input class="home-input" type="text" name="destination" value="home"/>
+                <input class="home-button" type="submit" value="HOME"/>
+            </form>
+        <table>
+            <tr>
+                <th>Company</th>
+                <th>Contact</th>
+                <th>Country</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td>Alfreds Futterkiste</td>
+                <td>Maria Anders</td>
+                <td>Germany</td>
+                <td>
+                    <form action="dispatcher" method="post">
+                        <input type="text" name="deleteId" class="hidden" value="2" />
+                        <input class="button" type="button" value="Del">
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Centro comercial Moctezuma</td>
+                <td>Francisco Chang</td>
+                <td>Mexico</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Ernst Handel</td>
+                <td>Roland Mendel</td>
+                <td>Austria</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Island Trading</td>
+                <td>Helen Bennett</td>
+                <td>UK</td>
+            </tr>
+            <tr>
+                <td>Laughing Bacchus Winecellars</td>
+                <td>Yoshi Tannamuri</td>
+                <td>Canada</td>
+            </tr>
+            <tr>
+                <td>Magazzini Alimentari Riuniti</td>
+                <td>Giovanni Rovelli</td>
+                <td>Italy</td>
+            </tr>
+        </table>
+
+    </div>
+</body>
+</html>

@@ -5,35 +5,31 @@ plugins {
 
 apply plugin: 'java'
 
+
 jar {
+	archiveName = "EJBServer.jar"
 	from {
 		configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
 	}
+	destinationDir = file '/Users/georgemarianmihailescu/Desktop/Master/TJPAD/servers/wildfly-25.0.1.Final/standalone/deployments'
 }
-
+war {
+	archiveName = "EJB.war"
+	destinationDir = file '/Users/georgemarianmihailescu/Desktop/Master/TJPAD/servers/wildfly-25.0.1.Final/standalone/deployments'
+}
 repositories {
 	mavenCentral()
 }
-compileJava {
-	sourceCompatibility = 1.8
-	targetCompatibility = 1.8
-}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 
 dependencies {
 
-	// https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
-	compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
+	compileOnly('javax:javaee-web-api:8.0.1')
 
-	// https://mvnrepository.com/artifact/org.postgresql/postgresql
-	implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
-	// https://mvnrepository.com/artifact/javax/javaee-api
-	compileOnly group: 'javax', name: 'javaee-api', version: '7.0'
 
-	compile 'org.hibernate:hibernate-core:5.2.10.Final'
-	// https://mvnrepository.com/artifact/org.hibernate.javax.persistence/hibernate-jpa-2.1-api
-	implementation group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: '1.0.0.Final'
-	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa
-	implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.5.0'
-
+	compile 'org.hibernate:hibernate-core:5.6.3.Final', 'org.hibernate:hibernate-entitymanager:5.6.3.Final',
+			'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final'
 
 }

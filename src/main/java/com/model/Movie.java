@@ -1,36 +1,39 @@
 package com.model;
 
 
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Movie")
-public class Movie {
+public class Movie implements Serializable {
     @Id
-    @GeneratedValue(generator = "increment")
-    @GenericGenerator(name = "increment", strategy = "increment")
-    @Column(name = "id")
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id_movie;
 
     private String title;
     private int rating;
     private String genre;
+
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy="Movie")
+    List<Actor> actors;
 
     public Movie(){
 
     }
 
     public Movie(int id,String title,int rating,String genre) {
-        this.id = id;
+        this.id_movie = id;
         this.title = title;
         this.rating = rating;
         this.genre = genre;
     }
 
     public int getId() {
-        return id;
+        return id_movie;
     }
 
     public int getRating() {
@@ -46,7 +49,7 @@ public class Movie {
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.id_movie = id;
     }
 
     public void setGenre(String genre) {
@@ -61,22 +64,25 @@ public class Movie {
         this.rating = rating;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Movie movie = (Movie) o;
-        return id == movie.id && rating == movie.rating && title.equals(movie.title) && genre.equals(movie.genre);
+
+    public List<Actor> getActors() {
+        return actors;
     }
 
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", rating=" + rating +
-                ", genre='" + genre + '\'' +
-                '}';
+    public void setActors(List<Actor> actors) {
+        this.actors = actors;
+    }
+
+    public void addActor(Actor a) {
+        if (a == null) {
+            actors = new ArrayList<>();
+        }
+        actors.add(a);
+        setActors(actors);
+    }
+    public void deleteActor(Actor a) {
+        actors.remove(a);
+        setActors(actors);
     }
 
 }
