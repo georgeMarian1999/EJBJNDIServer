@@ -1,7 +1,5 @@
 package com.model;
 
-
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,8 +16,8 @@ public class Movie implements Serializable {
     private int rating;
     private String genre;
 
-    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy="Movie")
-    List<Actor> actors;
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "movie")
+    private transient List<Actor> actors;
 
     public Movie(){
 
@@ -30,6 +28,16 @@ public class Movie implements Serializable {
         this.title = title;
         this.rating = rating;
         this.genre = genre;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id_movie=" + id_movie +
+                ", title='" + title + '\'' +
+                ", rating=" + rating +
+                ", genre='" + genre + '\'' +
+                '}';
     }
 
     public int getId() {

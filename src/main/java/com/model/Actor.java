@@ -61,4 +61,23 @@ public class Actor implements Serializable {
     public int getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "Actor{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", gender='" + gender + '\'' +
+                ", movie=" + movie +
+                '}';
+    }
+
+    public Movie getMovie() {
+        return movie;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
 }

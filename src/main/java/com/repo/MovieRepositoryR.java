@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface MovieRepositoryR  {
     List<Movie> getAll();
-    int getMaxId();
+    Movie save(Movie m);
     void deleteById(Integer integer);
     Movie findById(int id);
 }

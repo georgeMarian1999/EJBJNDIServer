@@ -30,9 +30,12 @@ public class AddActorServlet extends HttpServlet {
             int age = Integer.parseInt(request.getParameter("age"));
             String gender = request.getParameter("gender");
             int movieID = Integer.parseInt(request.getParameter("movieID"));
-            int id = actorRepository.getMaxId() + 1;
-            Actor actor = new Actor(id, name, age, gender);
-            actorRepository.save(actor);
+            Actor actor = new Actor();
+            System.out.println(movieID);
+            actor.setAge(age);
+            actor.setName(name);
+            actor.setGender(gender);
+            actorRepository.save(actor, movieID);
             request.setAttribute("name", null);
             request.getRequestDispatcher("/actors").forward(request, response);
 

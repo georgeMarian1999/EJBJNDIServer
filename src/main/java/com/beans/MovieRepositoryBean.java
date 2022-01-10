@@ -1,5 +1,6 @@
 package com.beans;
 
+import com.model.Actor;
 import com.model.Movie;
 import com.repo.MovieRepository;
 import com.repo.MovieRepositoryR;
@@ -10,8 +11,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -20,69 +19,39 @@ import java.util.List;
 public class MovieRepositoryBean implements MovieRepository, MovieRepositoryR {
 
 
-    @PersistenceContext(unitName = "movies")
+    @PersistenceContext(unitName = "ejb")
     private EntityManager manager;
 
     @Override
     public List<Movie> getAll() {
-        List<Movie> movies = new ArrayList<>();
+        List<Movie> movies;
         TypedQuery<Movie> query = manager.createQuery("select m from Movie m ", Movie.class);
         movies = query.getResultList();
-//        try {
-//
-//            String sql = "select * from \"Movie\"";
-//
-//
-//        } catch (SQLException e) {
-//            System.out.println(e);
-//        }
         return movies;
     }
 
     @Override
-    public int getMaxId() {
-//        try {
-//            if(con == null) {
-//                connect();
-//            }
-//            Statement statement = con.createStatement();
-//            String sql = "select max(id) as maxId from \"Movie\"";
-//            ResultSet rs = statement.executeQuery(sql);
-//            while(rs.next()) {
-//                return rs.getInt("maxId");
-//            }
-//        }catch (SQLException e) {
-//            System.out.println(e);
-//        }
-        return 0;
-    }
-
-    @Override
     public Movie findById(int id) {
-//        return
-//            String sql = "select * from \"Movie\" where id="+id;
-//
-//
-        return null;
+        return manager.find(Movie.class, id);
     }
 
     @Override
     public Movie save(Movie movie) {
-//            String sql = "insert into \"Movie\"(id,title,rating,genre) values ("+movie.getId()+","+"'"+movie.getTitle()+"'"+","+movie.getRating()+","+"'"+movie.getGenre()+"'"+")";
-//            return movie;
+        manager.persist(movie);
         return movie;
-
     }
-
-
-
 
     @Override
     public void deleteById(Integer integer) {
-
-            String sql = "delete from \"Movie\" where id = "+integer;
-
-            System.out.println("Deleted from database with id "+integer);
+        Movie movie = findById(integer);
+        TypedQuery<Actor> query = manager.createQuery("select a from Actor a where a.movie.id_movie = " +integer, Actor.class);
+        List<Actor> actors = query.getResultList();
+        for(Actor a: actors) {
+            manager.remove(a);
+        }
+        if (movie != null) {
+            manager.remove(movie);
+        }
     }
 
 

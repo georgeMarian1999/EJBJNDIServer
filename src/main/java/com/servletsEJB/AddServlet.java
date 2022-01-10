@@ -28,8 +28,10 @@ public class AddServlet extends HttpServlet {
             String title = request.getParameter("title");
             int rating = Integer.parseInt(request.getParameter("rating"));
             String genre = request.getParameter("genre");
-            int id = movieRepository.getMaxId() + 1;
-            Movie movie = new Movie(id,title,rating,genre);
+            Movie movie = new Movie();
+            movie.setTitle(title);
+            movie.setGenre(genre);
+            movie.setRating(rating);
             movieRepository.save(movie);
             System.out.println("New movie saved");
             request.getRequestDispatcher("/addSuccess").forward(request, response);

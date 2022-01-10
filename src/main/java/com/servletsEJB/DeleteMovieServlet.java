@@ -22,13 +22,14 @@ public class DeleteMovieServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String id = request.getParameter("deleteId");
+            String id = request.getParameter("deleteMovieId");
             int ID = 0;
+            System.out.println(id);
             if(id != null) {
                 ID = Integer.parseInt(id);
             }
             else {
-                request.getRequestDispatcher("/errorMessage.html").forward(request, response);
+                request.getRequestDispatcher("/error").forward(request, response);
             }
             movieRepository.deleteById(ID);
             System.out.println("Movie with id "+id+" deleted");
